@@ -1,0 +1,9 @@
+{% extends 'quiz/base.html' %}
+
+{% block content %}
+
+    <h2>Todays category {{ question.question_category }}</h2>
+    <a href="{% url 'question_list' pk=question.pk%}">
+        Start!
+    </a>
+{% endblock %}

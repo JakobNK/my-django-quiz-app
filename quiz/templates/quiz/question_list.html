@@ -1,14 +1,20 @@
-<!DOCTYPE html>
-<html>
-    <header>
-        <title>This is my quiz app</title>
-    </header>
-    <body>
-        <head>
-            <h1>Welcome to quiz app</h1>
-        </head>
-        <main>
-            <p>This is where we will show our quiz</p>
-        </main>
-    </body>
-</html>
+{% extends 'quiz/base.html' %}
+
+{% block content %}
+
+    <h2>Todays category {{ category }}</h2>
+    
+    <h3>{{ questions.question_text }}</h3>
+
+    <form method="POST">
+        {% csrf_token %}
+        
+        {% for option in options %}
+            <label>
+                <input type="radio" name="answer" value="{{ option }}"> {{ option }}
+            </label><br>
+        {% endfor %}
+
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}
