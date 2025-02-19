@@ -1,0 +1,34 @@
+{% extends 'quiz/base.html' %}
+
+{% block content %}
+
+<h2>Current Scoreboard!</h2>
+<table>
+    <tr>
+        <th>
+            User
+        </th>
+        <th>
+            Score
+        </th>
+        <th>
+            Date
+        </th>
+    </tr>
+
+    {% for user in scoreboard %}
+    <tr>
+        <th>
+            {{ user.userName }}
+        </th>
+        <th>
+            {{ user.score }}
+        </th>
+        <th>
+            {{ user.score_date }}
+        </th>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

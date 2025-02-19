@@ -3,18 +3,22 @@
 {% block content %}
 
     <h2>Todays category {{ category }}</h2>
-    
-    <h3>{{ questions.question_text }}</h3>
 
-    <form method="POST">
-        {% csrf_token %}
-        
-        {% for option in options %}
-            <label>
-                <input type="radio" name="answer" value="{{ option }}"> {{ option }}
-            </label><br>
-        {% endfor %}
+    {% if lockout %}
+        <p>You already did the quiz, NO CHEATING</p>
+        <a href="{% url 'home_page' %}">Back</a>
+    {% else %}
+        <h3>{{ questions.question_text }}</h3>
+        <form method="POST">
+            {% csrf_token %}
+            
+            {% for option in options %}
+                <label>
+                    <input type="radio" name="answer" value="{{ option }}" required> {{ option }}
+                </label><br>
+            {% endfor %}
 
-        <button type="submit">Submit</button>
-    </form>
+            <button type="submit">Submit</button>
+        </form>
+    {% endif %}
 {% endblock %}

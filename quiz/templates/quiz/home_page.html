@@ -1,9 +1,24 @@
 {% extends 'quiz/base.html' %}
 
 {% block content %}
-
     <h2>Todays category {{ question.question_category }}</h2>
-    <a href="{% url 'question_list' pk=question.pk%}">
-        Start!
-    </a>
+    {% if user.is_authenticated %}
+        <p>Hi {{ user.username|linebreaksbr }}!</p>
+        {% if lockout %}
+            <p>You have already completed the quiz!</p>
+        {% else %}
+            <a href="{% url 'question_list' pk=question.pk%}">
+                Start!
+            </a>
+        {% endif %}
+        <form action ="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Log Out</button>
+        </form>
+        {% include './scoreboard.html' %}
+    {% else %}
+        <a href="{% url 'login' %}">
+            Log in!
+        </a>
+    {% endif %}
 {% endblock %}
