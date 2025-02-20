@@ -11,8 +11,10 @@ from datetime import timedelta
 
 # Create your views here.
 
+
 def home_page(request):
-    question = Question.objects.all().first()
+    today = timezone.now().date()
+    question = Question.objects.filter(created_date__date=today).first()
     scoreboard = Scoreboard.objects.all()
     #scoreboard_date = Scoreboard.objects.filter(user=request.user).first().score_date.date()
     today = timezone.now().date()
@@ -30,7 +32,9 @@ def scoreboard(request):
     })
 
 def question_list(request, pk):
-    questions = get_object_or_404(Question, pk=pk)
+    today = timezone.now().date()
+    questions = get_object_or_404(Question.objects.filter(created_date__date=today), pk=pk)
+    print(questions)
     options = [questions.correct_answer] + questions.incorrect_answers
     random.shuffle(options) #Shuffle options so the correct is not always first
     category = questions.question_category
@@ -50,20 +54,18 @@ def question_list(request, pk):
             return redirect('scoreboard')  # Redirect to results or a completion page
 
     else:
-        if scoreboard.score_date.date() == timezone.now().date():
-            return render(request, 'quiz/question_list.html', {
-                'questions': questions,
-                'options': options,
-                'category': category,
-                'lockout': True
-            })
+        if scoreboard.score_date.date() == today:
+            lockout = True
         else:
-            return render(request, 'quiz/question_list.html', {
-                'questions': questions,
-                'options': options,
-                'category': category,
-                'lockout': False
-            })
+            lockout = False
+            
+        return render(request, 'quiz/question_list.html', {
+            'questions': questions,
+            'options': options,
+            'category': category,
+            'lockout': lockout
+        })
+        
     
 def sign_up(request):
     form_class = UserCreationForm(request.POST or None)

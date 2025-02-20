@@ -9,6 +9,7 @@ class Question(models.Model):
     question_text = models.TextField()
     correct_answer = models.CharField(max_length=255)
     incorrect_answers = models.JSONField()  # Store incorrect answers as a JSON array
+    created_date = models.DateTimeField(default=timezone.now)
         
     def __str__(self):
         return self.question_text
